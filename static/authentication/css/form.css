@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
+    word-spacing: 1px;
+}
+
+body{
+    background-color: #E5E7ED;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #96A2B2;
+}
+
+.container{
+    background-color: #FFFFFF;
+    padding: 20px;
+    width: 25%;
+    position: relative;
+}
+.container .header{
+    width: 100%;
+    height: auto;
+    text-align: center;
+    padding: 30px;
+    text-transform: uppercase;
+}
+.container .header h2{
+    font-size: 1.8em;
+}
+.container .header h3{
+    font-size: 1.2em;
+}
+.container .form{
+    padding: 30px;
+    width: 100%;
+}
+.container .form form{
+    width: 100%;
+}
+.container .form form .input-box{
+    width: 100%;
+    border-bottom: 1px solid #96A2B2;
+    padding: 10px;
+}
+.container .form form .input-box i{
+    color: #29AAFE;
+}
+.container .form form .input-box input{
+    padding: 10px;
+    width: 92%;
+    border: none;
+    outline: none;
+    color: #96A2B2;
+    font-weight: bold;
+}
+.container .form form .input-box input[type=text]{
+    text-transform: capitalize;
+}
+.container .form form .input-box input[type=email]{
+    text-transform: lowercase;
+}
+.container .form form .input-box input[type=password]{
+    text-transform: none;
+}
+.container .form form .input-box input::placeholder{
+    color: #96A2B2;
+    text-transform: capitalize;
+}
+.container .form form button{
+    margin-top: 30px;
+    color: #FFFFFF;
+    background-color: #29AAFE;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    padding: 10px;
+    width: 100%;
+}
+.container .form div#hyperlink{
+    margin-top: 10px;
+    font-size: .8em;
+    text-align: center;
+    text-transform: lowercase;
+}
+.container .form div#hyperlink a{
+    color: #29AAFE;
+    text-decoration: none;
+    text-transform: capitalize;
+}

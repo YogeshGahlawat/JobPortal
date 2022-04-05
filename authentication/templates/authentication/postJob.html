@@ -1,0 +1,207 @@
+<!-- Extending from dashboard as base template -->
+{% extends 'authentication/dashboard.html' %}
+
+<!-- loading static files i.e. css, images, js -->
+{% load static %}
+
+<!-- creating content for the web -->
+{% block child %}
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800" id="page-header">Post New Job</h1>
+    </div>
+
+    <div id="alertDiv"></div>
+
+    <!-- job post card -->
+
+    <div id="page-body">
+        <div class="row m-auto">
+            <div class="col-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">Organisation Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="addProfileSection">
+                            <div class="row">
+                                    <div class="form-floating col-4">
+                                    <input type="text" class="form-control"  name="organisationName">
+                                    <label for="floatingInput">Organisation</label>
+                                </div>
+                                <div class="form-floating col-4">
+                                    <select class="form-select" aria-label="Default select example" name="organisationScale">
+                                        <option selected>select</option>
+                                        <option value="1">1-10</option>
+                                        <option value="2">11-50</option>
+                                        <option value="3">51-200</option>
+                                        <option value="4">201-500</option>
+                                        <option value="5">500+</option>
+                                    </select>
+                                    <label for="floatingInput">Organisation Scale</label>
+                                </div>
+                                <div class="form-floating col-4">
+                                    <input type="text" class="form-control"  name="officeAddress">
+                                    <label for="floatingInput">Office Location</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">Job Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <div class="row mb-3">
+                                <div class="form-floating col-6">
+                                    <select class="form-select" aria-label="Default select example" name="jobProfile">
+                                        <option selected>select</option>
+                                        <option value="1">Backend Developer</option>
+                                        <option value="2">Frontend Developer</option>
+                                        <option value="3">Android Developer</option>
+                                        <option value="4">Graphics Designer</option>
+                                        <option value="5">UI/UX Designer</option>
+                                    </select>
+                                    <label for="floatingInput m-3">Job Profile</label>
+                                </div>
+                                <div class="form-floating col-6">
+                                    <select class="form-select" aria-label="Default select example" name="jobType">
+                                        <option selected>select</option>
+                                        <option value="1">Full Time</option>
+                                        <option value="2">Part Time</option>
+                                        <option value="3">Internship</option>
+                                    </select>
+                                    <label for="floatingInput">Job Type</label>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="form-floating">
+                                    <textarea class="form-control" id="floatingTextarea" style="min-height: 100px;" name="jobDescription"></textarea>
+                                    <label for="floatingTextarea">Job Description</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-floating mb-3 col-4">
+                                    <input type="text" class="form-control"  name="jobLocation">
+                                    <label for="floatingInput">Job Location</label>
+                                </div>
+                                <div class="form-floating mb-3 col-4">
+                                    <input type="text" class="form-control"  name="offeringSalary">
+                                    <label for="floatingInput">Offering Salary</label>
+                                </div>
+                                <div class="form-floating mb-3 col-4">
+                                    <input type="datetime-local" class="form-control"  name="offerValidUpto">
+                                    <label for="floatingInput">Offer Valid upto</label>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="form-floating col-6">
+                                    <input type="text" class="form-control" name="contactNumber">
+                                    <label for="floatingInput">Contact Number</label>
+                                </div>
+                                <div class="form-floating col-6">
+                                    <input type="text" class="form-control" name="emailAddress">
+                                    <label for="floatingInput">Email address</label>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="form-floating col-12">
+                                    <input type="text" class="form-control"  name="role">
+                                    <label for="floatingInput">Your Role</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary" id="postJob">Post Job</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            Useful links
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="#" class="btn btn-primary" id="postedjobs">Posted Jobs</a>
+                        <a href="{% url 'candidateList' %}" class="btn btn-primary">Applied Candidates</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        $(document.body).on('click', '#postJob', function (){
+            jQuery.ajax({
+                url: 'http://127.0.0.1:8000/postJob/',
+                type: 'post',
+                data: {
+                    organisationName: $('input[name=organisationName]').val(),
+                    organisationScale: $('select[name=organisationScale]').val(),
+                    officeAddress: $('input[name=officeAddress]').val(),
+                    jobProfile: $('select[name=jobProfile]').val(),
+                    jobType: $('select[name=jobType]').val(),
+                    jobDescription: $('textarea[name=jobDescription]').val(),
+                    jobLocation: $('input[name=jobLocation]').val(),
+                    offeringSalary: $('input[name=offeringSalary]').val(),
+                    offerValidUpto: $('input[name=offerValidUpto]').val(),
+                    postedBy: $('input[name=role]').val(),
+                    contactNumber: $('input[name=contactNumber]').val(),
+                    emailAddress: $('input[name=emailAddress]').val()
+                },
+                dataType: 'json',
+                success: function(result){
+                    $("#alertDiv").html('<div class="alert alert-'+ result['message_tag']+'" role="alert"><h4 class="alert-heading">'+ result['message'] +'</h4></div>')
+                }
+            })
+        });
+
+        $('#postedjobs').click(function (){
+            jQuery.ajax({
+                url: 'http://127.0.0.1:8000/postedJobs/',
+                type: 'post',
+                data: {
+                    username: '{{ username }}'
+                },
+                dataType: 'json',
+                success: function(result){
+                    $('#page-header').replaceWith('<h1 class="h3 mb-0 text-gray-800" id="page-header">Posted Jobs</h1>')
+                    $("#page-body").html('')
+                    data = result['data']
+                    for(count =0; count< data.length; count++) {
+                        html = '<a href="#" class="list-group-item list-group-item-action mb-3" aria-current="true"> <div class="d-flex w-100 justify-content-between mb-3"> <h5 class="mb-1">' + data[count]['fields']['jobProfile'] +'</h5> <small> Posted Date: '+ data[count]['fields']['postedDate'] +'</small><small> Valid Upto: '+ data[count]['fields']['validUpto'] +'</small><p class="mb-1">'+ data[count]['fields']['organisation_name'] +'</p></div><button type="button" class="btn btn-danger" onclick="removeJob('+ data[count]['pk'] +')">Remove</button></a>'
+                        $("#page-body").append(html)
+                    }
+                }
+            })
+        })
+
+        /**
+         * Description: function to remove job
+         */
+        function removeJob(job_id){
+            jQuery.ajax({
+                url: 'http://127.0.0.1:8000/removeJob/',
+                type: 'post',
+                data:{
+                    job_id: job_id
+                },
+                dataType: 'json',
+                success: function (result){
+                    location.reload()
+                }
+            })
+        }
+
+    </script>
+
+
+{% endblock%}

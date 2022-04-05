@@ -1,0 +1,164 @@
+<!-- Extending from dashboard as base template -->
+{% extends 'authentication/dashboard.html' %}
+
+<!-- loading static files i.e. css, images, js -->
+{% load static %}
+
+<!-- creating content for the web -->
+{% block child %}
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800" id="page-header">Search for Job</h1>
+    </div>
+
+    <div id="alertDiv"></div>
+
+    <div id="page-body">
+        <div class="row">
+            <div class="col-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">Search parameters</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4" id="addProfileSection">
+                            <div class="row mb-3">
+                                <div class="form-floating col-6">
+                                    <select class="form-select" aria-label="Default select example" name="jobProfile">
+                                        <option selected>select</option>
+                                        <option value="1">Backend Developer</option>
+                                        <option value="2">Frontend Developer</option>
+                                        <option value="3">Android Developer</option>
+                                        <option value="4">Graphics Designer</option>
+                                        <option value="5">UI/UX Designer</option>
+                                    </select>
+                                    <label for="floatingInput m-3">Job Profile</label>
+                                </div>
+                                <div class="form-floating col-6">
+                                    <select class="form-select" aria-label="Default select example" name="jobType">
+                                        <option selected>select</option>
+                                        <option value="1">Full Time</option>
+                                        <option value="2">Part Time</option>
+                                        <option value="3">Internship</option>
+                                    </select>
+                                    <label for="floatingInput">Job Type</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary" id="searchbtn">Search Job</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            Useful links
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="#" class="btn btn-primary" id="appliedJobs">Applied Jobs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-group" id="list"></div>
+    </div>
+
+    <script>
+
+        /**
+         * function to search for a job
+         */
+        $(document.body).on('click', '#searchbtn', function (){
+            jQuery.ajax({
+                url: 'http://127.0.0.1:8000/searchJob/',
+                type: 'post',
+                data: {
+                    jobProfile: $('select[name=jobProfile]').val(),
+                    jobType: $('select[name=jobType]').val(),
+                },
+                dataType: 'json',
+                success: function(result){
+                    if (result['status_code'] == 200) {
+                        $("#list").html('')
+                        data = result['data']
+                        for (count = 0; count < data.length; count++) {
+                            html = '<a href="#" class="list-group-item list-group-item-action mb-3" aria-current="true"> <div class="d-flex w-100 justify-content-between"> <h5 class="mb-1">' + data[count]['fields']['jobProfile'] + '</h5> <small> Posted Date: ' + data[count]['fields']['postedDate'] + '</small><small> Valid Upto: ' + data[count]['fields']['validUpto'] + '</small> </div> <div class="mb-3" <p class="mb-1">' + data[count]['fields']['organisation_name'] + '</p> <p class="mb-1">Job Description</p> <small>' + data[count]['fields']['description'] + '</small><p class="mb-1">Contact Details</p> <small>Email: ' + data[count]['fields']['email'] + '</small><small> Mobile: ' + data[count]['fields']['mobile'] + '</small></div><button type="button" class="btn btn-primary" onclick="applyJob(' + data[count]['pk'] + ')">Apply</button></a>'
+                            $("#list").append(html)
+                        }
+                    } else {
+                        $("#alertDiv").html('<div class="alert alert-'+ result['message_tag']+'" role="alert"><h4 class="alert-heading">'+ result['message'] +'</h4></div>')
+                    }
+                }
+            })
+        });
+
+        /**
+         * Description: function to apply for a job
+         */
+        function applyJob(job_id){
+            jQuery.ajax({
+                url: 'http://127.0.0.1:8000/applyJob/',
+                type: 'post',
+                data: {
+                    job_id: job_id,
+                    username: '{{ username }}'
+                },
+                dataType: 'json',
+                success: function (result){
+                    $("#alertDiv").html('<div class="alert alert-'+ result['message_tag']+'" role="alert"><h4 class="alert-heading">'+ result['message'] +'</h4></div>')
+                }
+            })
+        }
+
+        /**
+         * Description: functiont to list applied jobs
+         */
+        $(document.body).on('click', '#appliedJobs', function(){
+            jQuery.ajax({
+                url: 'http://127.0.0.1:8000/appliedJobs/',
+                type: 'post',
+                data: {
+                    username: '{{ username }}'
+                },
+                dataType: 'json',
+                success: function (result){
+                    $('#page-header').replaceWith('<h1 class="h3 mb-0 text-gray-800" id="page-header">Applied Jobs</h1>')
+                    $("#page-body").html('')
+                    data = result['data']
+                    for(count =0; count< data.length; count++) {
+                        html = '<a href="#" class="list-group-item list-group-item-action mb-3" aria-current="true"> <div class="d-flex w-100 justify-content-between mb-3"> <h5 class="mb-1">' + data[count][0]['fields']['jobProfile'] +'</h5> <small> Posted Date: '+ data[count][0]['fields']['postedDate'] +'</small><small> Valid Upto: '+ data[count][0]['fields']['validUpto'] +'</small><p class="mb-1">'+ data[count][0]['fields']['organisation_name'] +'</p></div><button type="button" class="btn btn-danger" onclick="withdrawApplication('+ data[count][0]['pk'] +')">Withdraw Application</button></a>'
+                        $("#page-body").append(html)
+                    }
+                }
+            })
+        })
+
+        /**
+         * Description: function to withdraw the application
+         */
+        function withdrawApplication(job_id){
+            jQuery.ajax({
+                url: 'http://127.0.0.1:8000/withdrawApplication/',
+                type: 'post',
+                data: {
+                    username: '{{ username }}',
+                    job_id: job_id
+                },
+                dataType: 'json',
+                success: function (result){
+                    $("#alertDiv").html('<div class="alert alert-'+ result['message_tag']+'" role="alert"><h4 class="alert-heading">'+ result['message'] +'</h4></div>')
+                    location.reload()
+                }
+            })
+        }
+
+    </script>
+
+
+{% endblock%}

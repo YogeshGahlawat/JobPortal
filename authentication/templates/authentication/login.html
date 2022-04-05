@@ -1,0 +1,56 @@
+<!-- extending from base template -->
+{% extends 'base.html' %}
+
+<!-- loading static files i.e. css, images, js -->
+{% load static %}
+
+<!-- linking stylesheet -->
+{% block stylesheet %}
+    <link rel="stylesheet" href="{% static 'authentication/css/form.css' %}">
+{% endblock %}
+
+<!-- content for the web -->
+{% block content %}
+
+    <!--  Login Form  -->
+    <div class="container">
+
+        <!-- toast -->
+        {% if messages %}
+            {% for message in messages %}
+                <div role="alert" class="fade alert alert-info alert-dismissible show">
+                    <button type="button" class="btn-close" aria-label="Close alert"></button>
+                    <div class="d-flex">
+                        <img alt="noti-icon" src="https://brand.workingsolutions.com/components/images/information.svg" width="28" class="me-4">
+                        <div>
+                            <p>{{ message }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="header">
+            <h2>Django Job Portal</h2>
+            <h3>Log Into your Account</h3>
+        </div>
+        <div class="form">
+            <form action="{% url 'login' %}" method="post">
+                {% csrf_token %}
+                <div class="input-box">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" name="email" id="" placeholder="Email">
+                </div>
+                <div class="input-box">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" name="password" id="" placeholder="password">
+                </div>
+                <button type="submit">SIGN IN</button>
+            </form>
+            <div id="hyperlink">
+                New User <a href="{% url 'register' %}">Register</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

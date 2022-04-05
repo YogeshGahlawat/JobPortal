@@ -1,0 +1,266 @@
+<!-- Extending from base template -->
+{% extends 'base.html' %}
+
+<!-- loading static files i.e. css, images, js -->
+{% load static %}
+
+<!-- creating content for the web page -->
+{% block content %}
+
+	<!-- Page Wrapper -->
+	<div id="wrapper">
+
+		<!-- Sidebar -->
+		<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Nav Item - Dashboard -->
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'dashboard' %}">
+					<i class="fas fa-tachometer-alt"></i>
+					<span>Django Job Portal</span></a>
+			</li>
+
+			<!-- Divider -->
+			<hr class="sidebar-divider my-0">
+
+			<!-- Nav Item - Dashboard -->
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'dashboard' %}">
+					<i class="fas fa-fw fa-tachometer-alt"></i>
+					<span>Dashboard</span></a>
+			</li>
+
+            <!-- Divider -->
+			<hr class="sidebar-divider">
+
+            <!-- Heading -->
+			<div class="sidebar-heading">
+				Jobs
+			</div>
+
+			<!-- Nav Item -->
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'postJob' %}" >
+					<i class="fa-solid fa-circle-plus"></i>
+					<span>Post Job</span>
+				</a>
+			</li>
+
+            <!-- Nav Item -->
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'candidateList' %}" >
+					<i class="fas fa-fw fa-cog"></i>
+					<span>Applied Candidates</span>
+				</a>
+			</li>
+
+            <!-- Nav Item -->
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'searchJob' %}" >
+					<i class="fa-solid fa-magnifying-glass-plus"></i>
+					<span>Search for Jobs</span>
+				</a>
+            </li>
+
+			<!-- Divider -->
+			<hr class="sidebar-divider">
+
+			<!-- Sidebar Toggler (Sidebar) -->
+			<div class="text-center d-none d-md-inline">
+				<button class="rounded-circle border-0" id="sidebarToggle"></button>
+			</div>
+
+		</ul>
+		<!-- End of Sidebar -->
+
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
+
+			<!-- Main Content -->
+			<div id="content">
+
+				<!-- Topbar -->
+				<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+					<!-- Sidebar Toggle (Topbar) -->
+					<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+						<i class="fa fa-bars"></i>
+					</button>
+
+					<!-- Topbar Navbar -->
+					<ul class="navbar-nav ml-auto">
+
+						<!-- Nav Item - Search Dropdown (Visible Only XS) -->
+						<li class="nav-item dropdown no-arrow d-sm-none">
+							<a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fas fa-search fa-fw"></i>
+							</a>
+							<!-- Dropdown - Messages -->
+							<div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+								aria-labelledby="searchDropdown">
+								<form class="form-inline mr-auto w-100 navbar-search">
+									<div class="input-group">
+										<input type="text" class="form-control bg-light border-0 small"
+											placeholder="Search for..." aria-label="Search"
+											aria-describedby="basic-addon2">
+										<div class="input-group-append">
+											<button class="btn btn-primary" type="button">
+												<i class="fas fa-search fa-sm"></i>
+											</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</li>
+
+						<div class="topbar-divider d-none d-sm-block"></div>
+
+						<!-- Nav Item - User Information -->
+						<li class="nav-item dropdown no-arrow">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ username }}</span>
+								<img class="img-profile rounded-circle" src="{% static 'authentication/images/icon.png' %}">
+							</a>
+							<!-- Dropdown - User Information -->
+							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+								aria-labelledby="userDropdown">
+								<a class="dropdown-item" href="#" id="profile">
+									<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+									Profile
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+									<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+									Logout
+								</a>
+							</div>
+						</li>
+
+					</ul>
+
+				</nav>
+				<!-- End of Topbar -->
+
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+
+                    <div id="userprofile"></div>
+
+					<div id="child-element">
+                        {% block child %}{% endblock %}
+                    </div>
+
+				</div>
+				<!-- /.container-fluid -->
+
+			</div>
+			<!-- End of Main Content -->
+
+			<!-- Footer -->
+			<footer class="sticky-footer bg-white">
+				<div class="container my-auto">
+					<div class="copyright text-center my-auto">
+						<span>Copyright &copy; Your Website 2022</span>
+					</div>
+				</div>
+			</footer>
+			<!-- End of Footer -->
+
+		</div>
+		<!-- End of Content Wrapper -->
+
+	</div>
+	<!-- End of Page Wrapper -->
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top">
+		<i class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document" style="background-color: #F86C6B">
+			<div class="modal-content">
+				<div class="modal-header" style="background-color: #F86C6B; color: #F1F1F1">
+					<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<a class="btn btn-primary" href="{% url 'logout' %}"
+						style="background-color: #ED9022; color: #F1F1F1; border-color: #ED9022;">Logout</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Change Password Modal-->
+	<div class="modal fade" id="changepassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document" style="background-color: #F86C6B">
+			<div class="modal-content">
+				<div class="modal-header" style="background-color: #F86C6B; color: #F1F1F1">
+					<h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="">
+						<div class="form-floating mb-3 wrap-input">
+							<input type="password" class="form-control" id="oldpassword" placeholder="Your password"
+								name="password">
+							<label for="floatingPassword">Current Password</label>
+						</div>
+						<div class="form-floating mb-3 wrap-input">
+							<input type="password" class="form-control" id="newpassworrd" placeholder="Your password"
+								name="password">
+							<label for="floatingPassword">New Password</label>
+						</div>
+						<div class="form-floating mb-3 wrap-input">
+							<input type="password" class="form-control" id="newpassword2" placeholder="Your password"
+								name="password">
+							<label for="floatingPassword">Confirm Password</label>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer" style="background-color: #F1F1F1">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<a class="btn btn-primary" href="login.html"
+						style="background-color: #ED9022; color: #F1F1F1; border-color: #ED9022;">Submit</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script>
+
+        /**
+        * Description: function to send ajax request to fetch user details
+        */
+        $('#profile').click(function (){
+            jQuery.ajax({
+                url: 'http://127.0.0.1:8000/profile/',
+                type: 'post',
+                data: {
+                    username: '{{ username }}'
+                },
+                dataType: 'json',
+                success: function (result){
+                    console.log(result)
+                    $('#child-element').html('')
+                    html = '<div class="d-sm-flex align-items-center justify-content-between mb-4"><h1 class="h3 mb-0 text-gray-800">Profile</h1></div><div class="card mb-4"><div class="card-body"><div class="mb-4" id="addProfileSection"><div class="row mb-4"> '+ result['data'][0]['fields']['first_name'] +' '+ result['data'][0]['fields']['last_name']+ '</div><div class="row mb-4">USERNAME: '+ result['data'][0]['fields']['username'] +'</div><div class="row mb-4"> Email: '+ result['data'][0]['fields']['email'] +'</div></div></div></div>';
+                    $('#userprofile').html(html)
+                }
+            })
+        });
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,98 @@
+<!-- Extending from dashboard as base template -->
+{% extends 'authentication/dashboard.html' %}
+
+<!-- loading static files i.e. css, images, js -->
+{% load static %}
+
+<!-- creating content for the web -->
+{% block child %}
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800" id="page-header">Candidate List</h1>
+    </div>
+
+    <div id="alertDiv"></div>
+
+    <div id="page-body">
+        <div class="row">
+            <div class="col-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">Search parameters</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4" id="addProfileSection">
+                            <div class="row mb-3">
+                                <div class="form-floating col-6">
+                                    <select class="form-select" aria-label="Default select example" name="jobProfile">
+                                        <option selected>select</option>
+                                        <option value="1">Backend Developer</option>
+                                        <option value="2">Frontend Developer</option>
+                                        <option value="3">Android Developer</option>
+                                        <option value="4">Graphics Designer</option>
+                                        <option value="5">UI/UX Designer</option>
+                                    </select>
+                                    <label for="floatingInput m-3">Job Profile</label>
+                                </div>
+                                <div class="form-floating col-6">
+                                    <select class="form-select" aria-label="Default select example" name="jobType">
+                                        <option selected>select</option>
+                                        <option value="1">Full Time</option>
+                                        <option value="2">Part Time</option>
+                                        <option value="3">Internship</option>
+                                    </select>
+                                    <label for="floatingInput">Job Type</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary" id="searchbtn">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-group" id="list"></div>
+    </div>
+
+    <script>
+
+        /**
+         * function to search for a job
+         */
+        $(document.body).on('click', '#searchbtn', function (){
+            jQuery.ajax({
+                url: 'http://127.0.0.1:8000/candidateList/',
+                type: 'post',
+                data: {
+                    jobProfile: $('select[name=jobProfile]').val(),
+                    jobType: $('select[name=jobType]').val(),
+                    username: '{{ username }}'
+                },
+                dataType: 'json',
+                success: function(result){
+                    console.log(result)
+                    if (result['status_code'] == 200) {
+                        $("#list").html('')
+                        data = result['data']
+                        for (count = 0; count < data.length; count++) {
+                            if  (data[count][0]['fields']['last_name'] == "null")
+                                html = '<a href="#" class="list-group-item list-group-item-action mb-3" aria-current="true"> <div class="d-flex w-100 justify-content-between"> <h5 class="mb-1">' + data[count][0]['fields']['first_name'] +'</h5><p class="mb-1">Contact Details: ' + data[count][0]['fields']['email'] + '</p> </div></a>'
+                            else
+                                html = '<a href="#" class="list-group-item list-group-item-action mb-3" aria-current="true"> <div class="d-flex w-100 justify-content-between"> <h5 class="mb-1">' + data[count][0]['fields']['first_name'] + ' ' + data[count][0]['fields']['last_name'] + '</h5><p class="mb-1">Contact Details: ' + data[count][0]['fields']['email'] + '</p> </div></a>'
+
+                            $("#list").append(html)
+                        }
+                    } else {
+                        $("#alertDiv").html('<div class="alert alert-'+ result['message_tag']+'" role="alert"><h4 class="alert-heading">'+ result['message'] +'</h4></div>')
+                    }
+                }
+            })
+        });
+
+    </script>
+
+
+{% endblock%}
